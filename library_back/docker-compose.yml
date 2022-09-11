@@ -26,7 +26,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./library_back
+      - ./library_back:/code
     depends_on:
       - db
     environment:
@@ -36,6 +36,19 @@ services:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
     networks:
+      - network-lb
+  
+  lib_front:
+    container_name: frontend_container
+    restart: always
+    build: ../library_front
+    ports:
+      - 3005:3005
+    depends_on:
+      - lib_back
+    volumes:
+      - ../library_front:/library_front
+    networks: 
       - network-lb
 
 networks:
