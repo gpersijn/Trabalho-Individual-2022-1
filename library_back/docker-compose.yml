@@ -16,4 +16,28 @@ services:
     volumes:
       - ./postgres:/var/lib/postgres
       - ./postgres/db.sql:/docker-entrypoint-initdb.d/db.sql
-    
+    networks:
+      - network-lb
+  
+  lib_back:
+    build: .
+    container_name: backend_container
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - ./library_back
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=library_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+    networks:
+      - network-lb
+
+networks:
+  network-lb:
+    driver: bridge
