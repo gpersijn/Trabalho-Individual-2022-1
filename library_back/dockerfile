@@ -1,10 +1,12 @@
 FROM python:3.10-alpine
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 RUN \
     apk update && \
     apk add postgresql-dev gcc python3-dev musl-dev && \
-    mkdir -p /library_back 
-WORKDIR /library_back
-COPY . /library_back
+    mkdir -p /lb
+WORKDIR /lb
+COPY . .
 RUN pip install -r requirements.txt --no-cache-dir
 EXPOSE 8000
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

@@ -43,13 +43,28 @@ services:
     restart: always
     build: ../library_front
     ports:
-      - 3005:3005
+      - 3000:3000
     depends_on:
       - lib_back
     volumes:
       - ../library_front:/library_front
     networks: 
       - network-lb
+
+  lib_nginx:
+      image: nginx:1.22.0-alpine
+      container_name: nginx_container
+      restart: always
+      ports:
+        - 3008:3008
+      volumes:
+        - ../nginx.conf:/etc/nginx/nginx.conf
+      links:
+        - lib_front
+      depends_on:
+        - lib_front
+      networks:
+        - network-lb
 
 networks:
   network-lb:
